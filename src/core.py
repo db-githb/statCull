@@ -148,7 +148,6 @@ def run_cull(model_path, out_path, thr_xyz):
     mini_model = GaussParamStore(tensors)
     pipeline = types.SimpleNamespace(model=mini_model) 
     model = pipeline.model
-    tensors = load_config(model_path)
     model   = GaussParamStore(tensors)
     means3D     = model.means.to("cpu") # cpu is faster for these operations
     center      = means3D.median(dim=0)
