@@ -14,6 +14,7 @@
 ### Conda (recommended)
 
 ```bash
+cd statCull
 conda env create -f environment.yml
 conda activate statcull
 ```
@@ -21,6 +22,7 @@ conda activate statcull
 ### Pip
 
 ```bash
+cd statCull
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -e .
