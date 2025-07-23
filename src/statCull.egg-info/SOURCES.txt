@@ -1,0 +1,10 @@
+pyproject.toml
+src/statCull.egg-info/PKG-INFO
+src/statCull.egg-info/SOURCES.txt
+src/statCull.egg-info/dependency_links.txt
+src/statCull.egg-info/entry_points.txt
+src/statCull.egg-info/requires.txt
+src/statCull.egg-info/top_level.txt
+src/statcull/__init__.py
+src/statcull/cli.py
+src/statcull/core.py

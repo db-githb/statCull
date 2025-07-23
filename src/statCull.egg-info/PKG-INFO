@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: statCull
+Version: 0.1.0
+Summary: Cull Unwanted Gaussians from a 3DGS checkpoint and export PLY
+License: MIT
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: torch
+Requires-Dist: numpy>=1.24
+Requires-Dist: plyfile

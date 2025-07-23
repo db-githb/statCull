@@ -1,0 +1,26 @@
+# pyproject.toml
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "statCull"
+version = "0.1.0"
+description = "Cull Unwanted Gaussians from a 3DGS checkpoint and export PLY"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+# All pure-Python deps here; heavy GPU bits you can leave to Conda if you want
+dependencies = [
+  "torch",         # or drop this and install via conda
+  "numpy>=1.24",
+  "plyfile"
+]
+
+[project.scripts]
+statcull = "src.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
