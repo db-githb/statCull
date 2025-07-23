@@ -39,3 +39,16 @@ statcull -ckpt <path/to/step-XXXXX.ckpt> \
 * `-ckpt`: your 3DGS checkpoint file.
 * `-o`: output PLY (default: `culled.ply`).
 * `-thr-x/-thr-y/-thr-z`: z‑score thresholds for x, y, and z coordinates respectively.
+
+**Output location**: By default, statCull writes the culled PLY to the outputs/ folder at the project root (it will be created if missing). Override with -o/--out if you want a different path.
+
+## Input Checkpoint Path Structure
+
+statCull only needs the path to a Nerfstudio/Splatfacto checkpoint (step-XXXXXXXXX.ckpt). A common layout looks like:
+
+```
+outputs/<SCENE_NAME>/splatfacto/<TIMESTAMP>/nerfstudio_models/step-000029999.ckpt
+```
+
+You can pass that full path directly to -ckpt. If you use the auto‑naming helper in the code, it derives the scene name from ancestor folders (e.g., <SCENE_NAME> above). If your structure differs, just give an explicit -o path.
+

@@ -4,6 +4,7 @@ from pathlib import Path
 from collections import OrderedDict
 import re
 import types
+from datetime import datetime
 
 
 PARAMS = {"means", "opacities", "scales", "quats", "features_dc", "features_rest"}
@@ -126,8 +127,22 @@ def write_ply(filename, count, map_to_tensors):
                     ply_file.write(np.float32(value).tobytes())
                 elif tensor.dtype == np.uint8:
                     ply_file.write(value.tobytes())
-        
-def run_cull(model_path, out_path, thr_xyz=(0.15, 0.15, 1.0)):
+
+def make_outpath(model_path, out_path = None, out_dir = "outputs", levels_up = 3, suffix = ".ply"):
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    if out_path is None:
+        for parent in model_path.parents:
+            if parent.name == "outputs":
+                scene = model_path.relative_to(parent).parts[0]
+        ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+        out_path = out_dir / f"{scene}_{ts}_culled{suffix}"
+    else:
+        out_path = Path(out_path)
+
+    return out_path
+
+def run_cull(model_path, out_path, thr_xyz):
     """Culls 3DGS gaussians based on z-scores and exports to PLY."""
     tensors = load_config(model_path)
     mini_model = GaussParamStore(tensors)
@@ -139,7 +154,7 @@ def run_cull(model_path, out_path, thr_xyz=(0.15, 0.15, 1.0)):
     center      = means3D.median(dim=0)
     std_dev     = means3D.std(dim=0)
     z_scores    = torch.abs((means3D - center.values) / std_dev)
-    thr         = torch.tensor([0.15, 0.15, 1.0])
+    thr         = torch.tensor(thr_xyz)
     cull_mask   = (z_scores > thr).any(dim=1)
     keep = ~cull_mask
     print(f"Total culled: {(cull_mask).sum().item()}/{means3D.shape[0]}")
@@ -149,6 +164,7 @@ def run_cull(model_path, out_path, thr_xyz=(0.15, 0.15, 1.0)):
         model.register_buffer(n, new)
 
     count, map_to_tensors = setup_write_ply(model)
+    out_path = make_outpath(model_path, out_path)
     write_ply(out_path, count, map_to_tensors)
 
     print(f"CULL COMPLETE: {out_path}")
